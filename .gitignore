@@ -1,0 +1,14 @@
+# Build output
+build/
+zentask
+*.exe
+*.o
+
+# Runtime data (keep data/sample_tasks.csv, ignore the live working file)
+/zentasks.csv
+
+# Editor/OS
+.vscode/
+.vs/
+*.swp
+.DS_Store
