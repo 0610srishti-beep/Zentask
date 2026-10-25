@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="description" content="A calm, dark workspace for keeping everyday tasks in order.">
+  <title>ZenTask — make room to focus</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="ZenTask home"><span class="brand-mark">z</span><span>zen<span class="brand-light">task</span></span></a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Task views">
+        <button class="nav-item active" data-filter="all"><span class="nav-icon">▦</span> All tasks <span class="nav-count" id="nav-all">0</span></button>
+        <button class="nav-item" data-filter="today"><span class="nav-icon">◷</span> Due today <span class="nav-count" id="nav-today">0</span></button>
+        <button class="nav-item" data-filter="overdue"><span class="nav-icon">↗</span> Overdue <span class="nav-count" id="nav-overdue">0</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="focus-card"><span class="focus-spark">✳</span><p class="focus-title">One thing at a time.</p><p class="focus-copy">Small steps still move you forward. Keep your list kind and realistic.</p></div>
+        <div class="profile"><div class="avatar">Z</div><div><strong>My workspace</strong><span>Personal planner</span></div><span class="online-dot"></span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong>Tasks</strong></div><div class="topbar-right"><span class="live-dot"></span><span>Saved locally</span><span class="top-divider"></span><span id="today-label"></span></div></header>
+      <section class="welcome-row"><div><p class="eyebrow">YOUR SPACE, YOUR PACE</p><h1>Make room to <span>focus.</span></h1><p class="subheading">A little less mental clutter. A little more done.</p></div><button class="primary-btn" id="add-task-btn"><span class="plus">＋</span> New task</button></section>
+
+      <section class="stats-grid" aria-label="Task overview">
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Total tasks</span><span class="stat-icon violet">▦</span></div><div class="stat-number" id="stat-total">0</div><div class="stat-note">Everything on your plate</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Due today</span><span class="stat-icon amber">◷</span></div><div class="stat-number" id="stat-today">0</div><div class="stat-note">Things to make time for</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Overdue</span><span class="stat-icon rose">↗</span></div><div class="stat-number" id="stat-overdue">0</div><div class="stat-note">Ready for a quick review</div></article>
+        <article class="stat-card highlight-card"><div class="stat-top"><span class="stat-label">Top priority</span><span class="stat-icon green">✳</span></div><div class="top-task-title" id="top-task-title">Nothing urgent</div><div class="stat-note" id="top-task-note">You're clear to choose what matters.</div></article>
+      </section>
+
+      <section class="tasks-panel">
+        <div class="panel-heading"><div><h2>Your tasks</h2><p id="list-subtitle">A clear list is a good place to start.</p></div><button class="quiet-btn" id="refresh-btn" title="Refresh tasks">↻ <span>Refresh</span></button></div>
+        <div class="toolbar"><label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search your tasks..." autocomplete="off"></label><div class="toolbar-right"><label class="select-wrap"><span class="sr-only">Filter by priority</span><select id="priority-filter"><option value="all">All priorities</option><option value="1">Priority 1</option><option value="2">Priority 2</option><option value="3">Priority 3</option><option value="4">Priority 4+</option></select></label><button class="sort-btn" id="sort-btn">↕ <span>Priority</span></button></div></div>
+        <div id="task-list" class="task-list" aria-live="polite"><div class="loading-state">Getting your tasks ready…</div></div>
+        <div class="list-footer"><span id="result-count">0 tasks</span><span><span class="footer-dot"></span> Changes save automatically</span></div>
+      </section>
+      <footer class="app-footer"><span>Built for real life, not perfect productivity.</span><span>ZenTask <span class="footer-version">· C core + web UI</span></span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="task-modal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head"><div><p class="eyebrow">A FRESH START</p><h2 id="modal-title">Add a task</h2></div><button class="icon-btn" id="close-modal" aria-label="Close dialog">×</button></div>
+      <form id="task-form">
+        <label class="field-label" for="task-title">Task title <span>*</span></label><input class="form-control" id="task-title" name="title" maxlength="127" placeholder="What needs doing?" required>
+        <label class="field-label" for="task-description">A few details <span class="optional">Optional</span></label><textarea class="form-control" id="task-description" name="description" rows="3" maxlength="511" placeholder="Add a note so future-you has the context..."></textarea>
+        <div class="form-row"><div><label class="field-label" for="task-priority">Priority</label><select class="form-control" id="task-priority" name="priority"><option value="1">1 — Urgent</option><option value="2">2 — High</option><option value="3" selected>3 — Normal</option><option value="4">4 — Low</option><option value="5">5 — Whenever</option></select><p class="field-hint">Lower number = more urgent</p></div><div><label class="field-label" for="task-due">Due date</label><input class="form-control" id="task-due" name="due" type="date"><p class="field-hint">Leave blank if there's no deadline</p></div></div>
+        <p class="form-error" id="form-error" role="alert"></p><div class="modal-actions"><button type="button" class="secondary-btn" id="cancel-modal">Cancel</button><button type="submit" class="primary-btn" id="save-task-btn">Save task <span>→</span></button></div>
+      </form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

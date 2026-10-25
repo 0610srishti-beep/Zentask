@@ -53,6 +53,32 @@ make        # builds ./zentask
 make clean  # remove build artifacts
 ```
 
+
+## Dark web dashboard (Windows)
+
+ZenTask also includes a small browser-based dashboard. The HTML, CSS and JavaScript frontend talks to a lightweight HTTP server written in C. The server reuses the same task structure, linked list, hash table, priority heap, and CSV save/load code as the console version. Adding, editing, or deleting a task updates `zentasks.csv` automatically.
+
+### Run it on Windows
+
+1. Install GCC/MinGW and make sure `gcc --version` works in PowerShell.
+2. Open the project folder (the one containing `build-web.bat`).
+3. Double-click `build-web.bat`, or run `./build-web.bat` from PowerShell.
+4. Keep the terminal window open and visit **http://127.0.0.1:8080** in Chrome or Edge.
+5. To stop the server, return to the terminal and press **Ctrl+C**.
+
+The first launch imports `data/sample_tasks.csv` into `zentasks.csv` if no saved task file exists. After that, the app uses your saved `zentasks.csv`. Back up that file if your tasks matter to you.
+
+### Web dashboard features
+
+- Add, edit, and delete tasks from the browser
+- Search by title, description, date, or task ID
+- Filter by due today, overdue, and priority
+- View the most urgent task, based on the existing priority heap
+- Automatic CSV persistence after each change
+- Responsive dark layout for desktop and mobile
+
+The web server is intended for local use on your own computer. It binds to `127.0.0.1` and is not designed to be exposed directly to the public internet.
+
 ## Usage
 
 ```
@@ -93,7 +119,10 @@ zentask/
 │   ├── priority_heap.c
 │   ├── file_io.c
 │   ├── commands.c
-│   └── main.c            CLI loop
+│   ├── main.c            CLI loop
+│   └── web_server.c      local HTTP server for browser UI
+├── web/                  # HTML, CSS and JavaScript dashboard
+├── build-web.bat         # build and launch web version on Windows
 ├── data/
 │   └── sample_tasks.csv  example data to load
 ├── Makefile

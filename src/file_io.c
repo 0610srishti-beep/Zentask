@@ -55,7 +55,8 @@ static int csv_parse_line(char *line, char *fields[5]) {
                 tmp[ti++] = *s++;
             }
             tmp[ti] = '\0';
-            fields[fld++] = strdup(tmp);
+            fields[fld] = (char *)malloc(strlen(tmp) + 1);
+            if (fields[fld]) { strcpy(fields[fld], tmp); fld++; }
         } else {
             char *start = s;
             while (*s && *s != ',') s++;
